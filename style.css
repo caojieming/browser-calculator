@@ -1,0 +1,45 @@
+#calc-screen {
+    margin: 20px;
+    padding: 5px;
+    outline: 1px solid #000000;
+    width: 210px;
+    text-align: right;
+}
+
+#calc-btns {
+    margin: 20px;
+}
+
+#numbers {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 120px;
+    float: left;
+}
+#numbers button {
+    /* unrounds corners */
+    border-radius: 0%;
+    /* removes shadow */
+    border-style: solid;
+
+    width: 40px;
+    height: 40px;
+}
+
+#operations {
+    display: flex;
+    flex-wrap: wrap;
+    width: 80px;
+    float: left;
+    margin-left: 20px;
+}
+#operations button {
+    /* unrounds corners */
+    border-radius: 0%;
+    /* removes shadow */
+    border-style: solid;
+
+    width: 40px;
+    height: 40px;
+}
