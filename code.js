@@ -58,16 +58,20 @@ function populateScreen(event) {
     if(curElement.classList.contains('operation') && numInput) {
         valChange = true;
         let opPressed = curElement.innerHTML;
-        // first calculation, need to set up first number and operation
-        if(valA === -1) {
-            console.log("first calculation if entered");
+        
+        // new operation, need to set up first number (optional) and operation
+        if(op === '' && opPressed !== '=') {
+            // console.log("setting up first value (situation dependent) and operation");
 
+            // may sometimes replace valA with the same value it already has
             valA = Number(screen.innerHTML);
             op = opPressed;
+            numInput = false;
         }
+
         // first number and operation are known, second number is on screen but not in valB, need to perform current operation before putting in the new operation into op
-        else if(valB === -1) {
-            console.log("second+ calculation if entered");
+        else if(valA !== -1 && op !== '') {
+            // console.log("second number exists, calculating");
 
             // get valB from screen
             valB = Number(screen.innerHTML);
@@ -81,14 +85,21 @@ function populateScreen(event) {
                     valA = operate(valA, subtract, valB);
                     break;
                 case "*":
-                    valA = operate(valA, multiply, valB);
+                    // rounds to the nearest thousandth's place
+                    valA = Math.round(operate(valA, multiply, valB) * 1000) / 1000;
                     break;
                 case "/":
-                    valA = operate(valA, divide, valB);
+                    if(valB == 0) {
+                        alert("You disgust me with your arrogance. You think you are worthy enough to divide this mortal plane by zero? Laughable. In that case, let all return to zero.");
+                        clearScreen();
+                        return;
+                    }
+                    // rounds to the nearest thousandth's place
+                    valA = Math.round(operate(valA, divide, valB) * 1000) / 1000;
                     break;
                 default:
-                    // equals sign, work on this logic later
-                    console.log("op symbol not recognized: " + opPressed);
+                    // shouldn't ever happen
+                    console.log("op symbol not recognized: " + op);
                     break;
             }
 
@@ -96,17 +107,30 @@ function populateScreen(event) {
             screen.innerHTML = valA;
 
             // update the operation
-            op = opPressed;
+            if(opPressed !== '=') {
+                op = opPressed;
+                // ensures that user must put in another number before another operation is allowed
+                numInput = false;
+            }
+            else {
+                // next operation, treat it as if you're dealing with a first time calculation
+                op = '';
+                // equals operation just gave a number, next input can be an operation (doesn't have to be, can still input a number, which would forget the recently calculated result)
+                numInput = true;
+            }
+            
 
             // reset valB for the next value
             valB = -1
 
         }
 
-        // ensures that user must put in another number before another operation is allowed
-        numInput = false;
+        // only triggers if you input '=' multiple times in a row
+        else {
+            // console.log("entered consecutive =");
+        }
+
     }
-    
     
 }
 
